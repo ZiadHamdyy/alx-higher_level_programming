@@ -1,8 +1,9 @@
 def magic_calculation(a, b, c):
     if a < b:
         result = a + b
-        if c < b:
-            result *= 10
-        else:
-            result = c + b
-        return result
+    elif c < b:
+        result = b - c
+    else:
+        result = a + b + c
+
+    return result
