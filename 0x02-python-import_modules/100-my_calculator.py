@@ -14,6 +14,7 @@ if __name__ == "__main__":
     fun = [calc.add, calc.sub, calc.mul, calc.div]
     for i in range(len(op)):
         if arguments[2] == op[i]:
-            print("{} {} {} = {}".format(int(arguments[1]), op[i], int(arguments[3]),
-                  fun[i](int(arguments[1]), int(arguments[3]))))
+            print("{} {} {} = {}".format(int(arguments[1]), op[i],
+                  int(arguments[3]), fun[i](int(arguments[1]),
+                  int(arguments[3]))))
             exit(0)
