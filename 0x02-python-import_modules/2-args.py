@@ -7,7 +7,7 @@ if __name__ == "__main__":
     arguments = sys.argv
     number = len(arguments)
     if number == 1:
-        print("{} argument:".format(number))
+        print("{} argument:".format(number - 1))
     else:
         print("{} arguments:".format(number - 1))
 
