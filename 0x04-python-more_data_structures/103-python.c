@@ -1,10 +1,8 @@
-#define PY_SIZE_T_CLEAN
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <stdio.h>
 
 void print_python_bytes(PyObject *p) {
-    PyBytesObject *bytes = (PyBytesObject *)p;
-
     printf("[.] bytes object info\n");
     if (!PyBytes_Check(p)) {
         printf("  [ERROR] Invalid Bytes Object\n");
