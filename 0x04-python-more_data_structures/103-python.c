@@ -42,24 +42,3 @@ void print_python_list(PyObject *p) {
         }
     }
 }
-
-int main() {
-    Py_Initialize();
-    PyObject *s = Py_BuildValue("y", "Hello");
-    PyObject *b = Py_BuildValue("y", "\xff\xf8\x00\x00\x00\x00\x00\x00");
-    PyObject *l = PyList_New(0);
-
-    PyList_Append(l, s);
-    PyList_Append(l, b);
-
-    print_python_bytes(s);
-    print_python_bytes(b);
-    print_python_list(l);
-
-    Py_DECREF(s);
-    Py_DECREF(b);
-    Py_DECREF(l);
-    Py_Finalize();
-
-    return 0;
-}
