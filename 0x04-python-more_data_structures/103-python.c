@@ -1,57 +1,65 @@
-#define PY_SIZE_T_CLEAN
 #include <Python.h>
 #include <stdio.h>
+
 void print_python_bytes(PyObject *p) {
-    printf("[.] bytes object info\n");
+    Py_ssize_t size, i;
+    char *string;
 
     if (!PyBytes_Check(p)) {
+        printf("[.] bytes object info\n");
         printf("  [ERROR] Invalid Bytes Object\n");
         return;
     }
 
-    Py_ssize_t size = PyBytes_Size(p);
-    printf("  size: %zd\n", size);
+    size = PyBytes_GET_SIZE(p);
+    string = PyBytes_AsString(p);
 
-    char *str = PyBytes_AsString(p);
-    if (str == NULL) {
-        printf("  trying string: <nil>\n");
-    } else {
-        printf("  trying string: %s\n", str);
-    }
+    printf("[.] bytes object info\n");
+    printf("  size: %ld\n", size);
+    printf("  trying string: %s\n", string);
 
-    printf("  first 10 bytes: ");
-    for (Py_ssize_t i = 0; i < 10 && i < size; i++) {
-        printf("%02x ", (unsigned char) str[i]);
+    printf("  first %d bytes: ", (int)(size > 10 ? 10 : size));
+    for (i = 0; i < (size > 10 ? 10 : size); i++) {
+        printf("%02x ", string[i] & 0xff);
     }
     printf("\n");
 }
+
 void print_python_list(PyObject *p) {
-    PyListObject *list = (PyListObject *) p;
+    PyListObject *list = (PyListObject *)p;
+    Py_ssize_t size, i;
 
+    size = PyList_Size(p);
     printf("[*] Python list info\n");
-    Py_ssize_t size = PyList_Size(p);
-    printf("[*] Size of the Python List = %zd\n", size);
+    printf("[*] Size of the Python List = %ld\n", size);
+    printf("[*] Allocated = %ld\n", list->allocated);
 
-    Py_ssize_t allocated = list->allocated;
-    printf("[*] Allocated = %zd\n", allocated);
-
-    for (Py_ssize_t i = 0; i < size; i++) {
-        PyObject *item = PyList_GetItem(p, i);
-        printf("Element %zd: ", i);
-        if (PyBytes_Check(item)) {
-            print_python_bytes(item);
-        } else if (PyLong_Check(item)) {
-            printf("int\n");
-        } else if (PyFloat_Check(item)) {
-            printf("float\n");
-        } else if (PyTuple_Check(item)) {
-            printf("tuple\n");
-        } else if (PyList_Check(item)) {
-            printf("list\n");
-        } else if (PyUnicode_Check(item)) {
-            printf("str\n");
-        } else {
-            printf("<other>\n");
+    for (i = 0; i < size; i++) {
+        PyObject *element = PyList_GetItem(p, i);
+        printf("Element %ld: %s\n", i, Py_TYPE(element)->tp_name);
+        if (PyBytes_Check(element)) {
+            print_python_bytes(element);
         }
     }
+}
+
+int main() {
+    Py_Initialize();
+    PyObject *s = Py_BuildValue("y", "Hello");
+    PyObject *b = Py_BuildValue("y", "\xff\xf8\x00\x00\x00\x00\x00\x00");
+    PyObject *l = PyList_New(0);
+
+    PyList_Append(l, s);
+    PyList_Append(l, b);
+
+    print_python_bytes(s);
+    print_python_bytes(b);
+    print_python_list(l);
+
+    Py_DECREF(s);
+    Py_DECREF(b);
+    Py_DECREF(l);
+    Py_Finalize();
+
+    return 0;
 }
