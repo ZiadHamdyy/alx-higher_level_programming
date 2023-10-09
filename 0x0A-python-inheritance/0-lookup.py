@@ -5,7 +5,6 @@
 def lookup(obj):
     """lookup"""
 
-    attributes = dir(obj)
-    for i in attributes:
-        if not i.startswith("__"):
-            return attributes
+    attributes_and_methods = dir(obj)
+    filtered_attributes_and_methods = [item for item in attributes_and_methods if not item.startswith("__")]
+    return filtered_attributes_and_methods
