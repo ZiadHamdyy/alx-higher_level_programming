@@ -3,12 +3,4 @@ function add (a, b) {
   return parseInt(a) + parseInt(b);
 }
 
-const arg1 = process.argv[2];
-const arg2 = process.argv[3];
-
-const result = add(arg1, arg2);
-if (isNaN(result)) {
-  console.log('NaN');
-} else {
-  console.log(result);
-}
+if (isNaN(add(process.argv[2], process.argv[3]))) { console.log('NaN'); } else { console.log(add(process.argv[2], process.argv[3])); }
