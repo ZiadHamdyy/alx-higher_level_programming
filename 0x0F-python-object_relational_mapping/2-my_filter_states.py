@@ -7,10 +7,6 @@ import MySQLdb
 
 if __name__ == '__main__':
     args = sys.argv
-
-    if len(sys.argv) != 5:
-        sys.exit(1)
-
     conn = MySQLdb.connect(host="localhost", port=3306, user=args[1],
                            passwd=args[2], db=args[3])
     cur = conn.cursor()
