@@ -13,7 +13,13 @@ if __name__ == "__main__":
     email = sys.argv[2]
 
     data = {'email': email}
-    response = requests.post(url, data=data)
 
-    print(f"Your email is: {email}")
-    print(response.text)
+    try:
+        response = requests.post(url, data=data)
+        response.raise_for_status()  # Check for HTTP errors
+
+        print(f"Your email is: {email}")
+        print(response.text)
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
